@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>برنامه‌ریز کمپین‌ها — تا پایان ۱۴۰۵</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#152238; --ink-soft:#3a4a63; --paper:#f7f8fa; --panel:#ffffff;
+    --line:#e2e6ec; --teal:#2f8f83; --amber:#d98c2b; --muted:#8994a6; --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:'Vazirmatn',sans-serif;padding:26px 20px 60px;}
+  .wrap{max-width:1180px;margin:0 auto;}
+  header h1{font-size:21px;font-weight:800;margin:0 0 6px;}
+  header p{margin:0;color:var(--ink-soft);font-size:13.5px;line-height:1.9;max-width:680px;}
+  .legend{display:flex;gap:18px;margin-top:12px;flex-wrap:wrap;}
+  .legend span{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--ink-soft);}
+  .swatch{width:12px;height:12px;border-radius:3px;display:inline-block;}
+
+  .panels{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:22px 0;}
+  @media(max-width:820px){.panels{grid-template-columns:1fr;}}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 16px 14px;}
+  .panel h2{font-size:13.5px;font-weight:700;margin:0 0 12px;}
+  .row{display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;align-items:end;}
+  .field{flex:1;min-width:100px;}
+  .field.sm{flex:0 0 80px;min-width:80px;}
+  label{font-size:11px;color:var(--muted);display:block;margin-bottom:3px;}
+  input[type=text],select{width:100%;padding:8px 9px;border:1px solid var(--line);border-radius:7px;font-family:'Vazirmatn',sans-serif;font-size:12.5px;background:#fff;color:var(--ink);}
+  input[type=color]{width:36px;height:34px;border:1px solid var(--line);border-radius:7px;padding:2px;background:#fff;cursor:pointer;}
+  button.primary{background:var(--ink);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-family:'Vazirmatn',sans-serif;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap;}
+  button.primary:hover{background:#0f1a2c;}
+  button.primary:disabled{background:#c7cdd8;cursor:not-allowed;}
+  .hint{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.8;}
+  .date-group{display:flex;gap:6px;flex:1.4;min-width:200px;}
+
+  .timeline-card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:16px 16px 20px;overflow-x:auto;}
+  .months-header{display:flex;min-width:900px;margin-bottom:10px;}
+  .months-header div{
+    text-align:center;font-size:11.5px;font-weight:700;color:#fff;background:var(--ink);
+    padding:6px 2px;border-inline-start:1px solid var(--paper);
+  }
+  .months-header div:first-child{border-inline-start:none;}
+  .rows-wrap{min-width:900px;}
+  .track-row{display:flex;align-items:center;margin-bottom:10px;}
+  .track-label{
+    flex:0 0 150px;font-size:12.5px;font-weight:600;padding-inline-end:10px;
+    display:flex;align-items:center;justify-content:space-between;gap:6px;
+  }
+  .track{flex:1;position:relative;height:34px;background:#eef0f4;border-radius:6px;overflow:hidden;}
+  .base-bar{position:absolute;inset:0;opacity:.55;}
+  .ov-bar{
+    position:absolute;top:0;bottom:0;border-radius:4px;
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:10.5px;font-weight:600;
+    outline:2px dashed rgba(255,255,255,.85);outline-offset:-3px;overflow:hidden;padding:0 4px;white-space:nowrap;
+  }
+  .del-row{background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;flex:0 0 auto;}
+  .del-row:hover{color:#c0392b;}
+
+  .list{margin-top:22px;}
+  .list h2{font-size:13.5px;font-weight:700;margin:0 0 10px;}
+  .ov-item{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:8px 12px;margin-bottom:6px;font-size:12.5px;}
+  .ov-left{display:flex;align-items:center;gap:8px;}
+  .status{font-size:11px;color:var(--muted);text-align:center;padding:16px 0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>برنامه‌ریز کمپین‌ها — شهریور تا پایان اسفند ۱۴۰۵</h1>
+    <p>لایه پایه یعنی کانال‌ها و ریتم‌های همیشگی، روی کل بازه فعال است. وقتی رویداد یا درخواستی رسید، آن را با تاریخ دقیق، جای یکی از ردیف‌های پایه می‌گذاری — ظرفیت ثابت می‌ماند، فقط جابه‌جا می‌شود.</p>
+    <div class="legend">
+      <span><i class="swatch" style="background:var(--teal)"></i> لایه پایه</span>
+      <span><i class="swatch" style="background:var(--amber)"></i> رویداد / درخواست جایگزین</span>
+      <span id="syncStatus" style="color:var(--muted);">در حال اتصال...</span>
+    </div>
+  </header>
+
+  <div class="panels">
+    <div class="panel">
+      <h2>افزودن ردیف پایه (کانال / ریتم ثابت)</h2>
+      <div class="row">
+        <div class="field"><label>نام کانال یا کمپین</label><input type="text" id="rowName" placeholder="مثلاً: ریتارگت یکتانت"></div>
+        <div class="field sm"><label>رنگ</label><input type="color" id="rowColor" value="#2f8f83"></div>
+      </div>
+      <button class="primary" onclick="addRow()">افزودن به لایه پایه</button>
+      <div class="hint">هر ردیف پایه به‌صورت پیش‌فرض روی کل بازه شهریور تا اسفند ۱۴۰۵ فعال است.</div>
+    </div>
+
+    <div class="panel">
+      <h2>افزودن رویداد / درخواست (جایگزینی)</h2>
+      <div class="row">
+        <div class="field"><label>نام رویداد</label><input type="text" id="ovName" placeholder="مثلاً: کمپین تولد رسمیو"></div>
+        <div class="field sm"><label>رنگ</label><input type="color" id="ovColor" value="#d98c2b"></div>
+      </div>
+      <div class="row">
+        <div class="field"><label>جای کدام ردیف پایه؟</label><select id="ovRow"></select></div>
+      </div>
+      <div class="row">
+        <div class="date-group">
+          <div class="field"><label>ماه شروع</label><select id="ovStartMonth" onchange="fillDayOptions('ovStartMonth','ovStartDay')"></select></div>
+          <div class="field sm"><label>روز</label><select id="ovStartDay"></select></div>
+        </div>
+        <div class="date-group">
+          <div class="field"><label>ماه پایان</label><select id="ovEndMonth" onchange="fillDayOptions('ovEndMonth','ovEndDay')"></select></div>
+          <div class="field sm"><label>روز</label><select id="ovEndDay"></select></div>
+        </div>
+      </div>
+      <button class="primary" id="addOvBtn" onclick="addOverride()">جایگزین کن</button>
+      <div class="hint">این رویداد جای ردیف انتخابی را فقط در همان بازه تاریخی می‌گیرد؛ بقیه بازه آن ردیف دست‌نخورده می‌ماند.</div>
+    </div>
+  </div>
+
+  <div class="timeline-card">
+    <div class="months-header" id="monthsHeader"></div>
+    <div class="rows-wrap" id="rowsWrap"></div>
+    <div id="emptyState" class="status" style="display:none;">هنوز ردیف پایه‌ای اضافه نشده — از پنل بالا شروع کن.</div>
+  </div>
+
+  <div class="list">
+    <h2>رویدادهای فعال</h2>
+    <div id="ovList"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const MONTHS = [
+  {name:"شهریور", days:31},
+  {name:"مهر", days:30},
+  {name:"آبان", days:30},
+  {name:"آذر", days:30},
+  {name:"دی", days:30},
+  {name:"بهمن", days:30},
+  {name:"اسفند", days:29}
+];
+const TOTAL_DAYS = MONTHS.reduce((s,m)=>s+m.days,0);
+const MONTH_START = []; // cumulative day offset (0-indexed) where each month starts
+(function(){let acc=0; MONTHS.forEach(m=>{MONTH_START.push(acc); acc+=m.days;});})();
+
+let rows = [];
+let overrides = [];
+
+function uid(){ return Math.random().toString(36).slice(2,9); }
+
+function dayOffset(monthIdx, day){ return MONTH_START[monthIdx] + (day-1); }
+
+const SUPABASE_URL = 'https://zjoyaclaioccclpxndewh.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpqb3lhY2xhaW9jY2xweG5kZXdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcyMjEzMjUsImV4cCI6MjEwMjc5NzMyNX0.F4wVYxh6Q43tGXBD-mNRL0nndZBuiSWcOH_Aa9UTNhs';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+async function loadState(){
+  setSyncStatus('در حال بارگذاری...');
+  try{
+    const { data, error } = await sb.from('campaign_planner').select('rows_json, overrides_json').eq('id','default').single();
+    if(error) throw error;
+    rows = data.rows_json ? JSON.parse(data.rows_json) : [];
+    overrides = data.overrides_json ? JSON.parse(data.overrides_json) : [];
+    setSyncStatus('همگام با ابر ✓');
+  }catch(e){
+    console.error('load error', e);
+    rows = []; overrides = [];
+    setSyncStatus('خطا در اتصال به دیتابیس — تغییرات موقتاً فقط محلی ذخیره می‌شود');
+  }
+  render();
+}
+
+async function saveState(){
+  setSyncStatus('در حال ذخیره...');
+  try{
+    const { error } = await sb.from('campaign_planner').update({
+      rows_json: JSON.stringify(rows),
+      overrides_json: JSON.stringify(overrides),
+      updated_at: new Date().toISOString()
+    }).eq('id','default');
+    if(error) throw error;
+    setSyncStatus('همگام با ابر ✓');
+  }catch(e){
+    console.error('save error', e);
+    setSyncStatus('خطا در ذخیره‌سازی ابری');
+  }
+}
+
+function setSyncStatus(text){
+  const el = document.getElementById('syncStatus');
+  if(el) el.textContent = text;
+}
+
+function buildMonthsHeader(){
+  const el = document.getElementById('monthsHeader');
+  el.innerHTML = MONTHS.map(m=>{
+    const pct = (m.days/TOTAL_DAYS*100).toFixed(3);
+    return `<div style="flex:0 0 ${pct}%">${m.name} ۱۴۰۵</div>`;
+  }).join('');
+}
+
+function fillMonthSelectors(){
+  ['ovStartMonth','ovEndMonth'].forEach(id=>{
+    const sel = document.getElementById(id);
+    sel.innerHTML = MONTHS.map((m,i)=>`<option value="${i}">${m.name}</option>`).join('');
+  });
+  fillDayOptions('ovStartMonth','ovStartDay');
+  fillDayOptions('ovEndMonth','ovEndDay');
+}
+function fillDayOptions(monthSelId, daySelId){
+  const monthIdx = parseInt(document.getElementById(monthSelId).value || 0);
+  const days = MONTHS[monthIdx].days;
+  const daySel = document.getElementById(daySelId);
+  const prev = parseInt(daySel.value)||1;
+  let opts='';
+  for(let d=1; d<=days; d++) opts += `<option value="${d}">${d}</option>`;
+  daySel.innerHTML = opts;
+  daySel.value = Math.min(prev, days);
+}
+
+function populateRowSelector(){
+  const sel = document.getElementById('ovRow');
+  sel.innerHTML = rows.length
+    ? rows.map(r=>`<option value="${r.id}">${r.name}</option>`).join('')
+    : '<option value="">— ابتدا یک ردیف پایه بساز —</option>';
+  document.getElementById('addOvBtn').disabled = rows.length===0;
+}
+
+function addRow(){
+  const name = document.getElementById('rowName').value.trim();
+  const color = document.getElementById('rowColor').value;
+  if(!name) return;
+  rows.push({id:uid(), name, color});
+  document.getElementById('rowName').value='';
+  saveState(); render();
+}
+function removeRow(id){
+  rows = rows.filter(r=>r.id!==id);
+  overrides = overrides.filter(o=>o.rowId!==id);
+  saveState(); render();
+}
+function addOverride(){
+  const name = document.getElementById('ovName').value.trim();
+  const color = document.getElementById('ovColor').value;
+  const rowId = document.getElementById('ovRow').value;
+  const sm = parseInt(document.getElementById('ovStartMonth').value);
+  const sd = parseInt(document.getElementById('ovStartDay').value);
+  const em = parseInt(document.getElementById('ovEndMonth').value);
+  const ed = parseInt(document.getElementById('ovEndDay').value);
+  if(!name || !rowId) return;
+  let start = dayOffset(sm, sd);
+  let end = dayOffset(em, ed);
+  if(end < start){ const t=start; start=end; end=t; }
+  overrides.push({id:uid(), name, color, rowId, start, end});
+  document.getElementById('ovName').value='';
+  saveState(); render();
+}
+function removeOverride(id){
+  overrides = overrides.filter(o=>o.id!==id);
+  saveState(); render();
+}
+
+function fmtDate(offset){
+  let acc = 0;
+  for(let i=0;i<MONTHS.length;i++){
+    if(offset < acc + MONTHS[i].days){
+      return `${offset-acc+1} ${MONTHS[i].name}`;
+    }
+    acc += MONTHS[i].days;
+  }
+  return '';
+}
+
+function render(){
+  buildMonthsHeader();
+  fillMonthSelectors();
+  populateRowSelector();
+
+  const wrap = document.getElementById('rowsWrap');
+  const emptyState = document.getElementById('emptyState');
+  wrap.innerHTML = '';
+  emptyState.style.display = rows.length ? 'none' : 'block';
+
+  rows.forEach(row=>{
+    const line = document.createElement('div');
+    line.className = 'track-row';
+
+    const label = document.createElement('div');
+    label.className = 'track-label';
+    label.innerHTML = `<span>${row.name}</span><button class="del-row" title="حذف ردیف" onclick="removeRow('${row.id}')">✕</button>`;
+    line.appendChild(label);
+
+    const track = document.createElement('div');
+    track.className = 'track';
+    const base = document.createElement('div');
+    base.className = 'base-bar';
+    base.style.background = row.color;
+    track.appendChild(base);
+
+    overrides.filter(o=>o.rowId===row.id).forEach(o=>{
+      const bar = document.createElement('div');
+      bar.className = 'ov-bar';
+      const rightPct = (o.start/TOTAL_DAYS*100).toFixed(3);
+      const widthPct = ((o.end-o.start+1)/TOTAL_DAYS*100).toFixed(3);
+      bar.style.right = rightPct+'%';
+      bar.style.width = widthPct+'%';
+      bar.style.background = o.color;
+      bar.textContent = o.name;
+      bar.title = `${o.name}: ${fmtDate(o.start)} تا ${fmtDate(o.end)}`;
+      track.appendChild(bar);
+    });
+
+    line.appendChild(track);
+    wrap.appendChild(line);
+  });
+
+  const ovList = document.getElementById('ovList');
+  if(overrides.length===0){
+    ovList.innerHTML = '<div class="status">هنوز رویدادی ثبت نشده.</div>';
+  } else {
+    ovList.innerHTML = overrides.map(o=>{
+      const row = rows.find(r=>r.id===o.rowId);
+      const rowName = row ? row.name : '(ردیف حذف شده)';
+      return `<div class="ov-item">
+        <div class="ov-left"><i class="swatch" style="background:${o.color}"></i>
+          <span><b>${o.name}</b> — جای «${rowName}» از ${fmtDate(o.start)} تا ${fmtDate(o.end)}</span>
+        </div>
+        <button class="del-row" onclick="removeOverride('${o.id}')">حذف ✕</button>
+      </div>`;
+    }).join('');
+  }
+}
+
+loadState();
+</script>
+</body>
+</html>
